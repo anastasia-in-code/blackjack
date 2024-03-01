@@ -11,7 +11,7 @@ export interface ICardsState {
   gameStatus: GameStatusType;
 }
 
-export type GameStatusType = "in progress" | "victory" | "loss";
+export type GameStatusType = "in progress" | "victory" | "loss" | "not started";
 
 export enum StateActions {
   SET_DECK_ID = "SET_DECK_ID",
@@ -40,7 +40,7 @@ const initialState: ICardsState = {
   playerScore: 0,
   houseCards: [],
   playerCards: [],
-  gameStatus: "in progress",
+  gameStatus: "not started",
 };
 
 export const CardsContext = createContext<ICardsState | null>(null);

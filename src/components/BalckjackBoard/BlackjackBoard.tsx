@@ -15,6 +15,8 @@ const BlackjackBoard: React.FC = () => {
   const cards = useCardsState();
   const dispatch = useCardsDispatch();
 
+  console.log(cards.deckId)
+
   useEffect(() => {
     const fetchDeck = async (): Promise<void> => {
       try {
@@ -22,7 +24,7 @@ const BlackjackBoard: React.FC = () => {
         const cards = await cardsAPI.drawCards(newDeckId, 4);
         await cardsAPI.addToPile(newDeckId, "house", cards.slice(0, 2));
         await cardsAPI.addToPile(newDeckId, "player", cards.slice(2));
-        localStorage.setItem("deckId", newDeckId);
+
         dispatch({
           type: StateActions.SET_DECK_ID,
           payload: newDeckId,
@@ -32,39 +34,8 @@ const BlackjackBoard: React.FC = () => {
       }
     };
 
-    const storedDeckId = localStorage.getItem("deckId");
-    if (storedDeckId) {
-      dispatch({
-        type: StateActions.SET_DECK_ID,
-        payload: storedDeckId,
-      });
-    } else {
       fetchDeck();
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    const fetchPiles = async (deckId: string): Promise<void> => {
-      try {
-        const houseCards = await cardsAPI.getPile(deckId, "house");
-        const playerCards = await cardsAPI.getPile(deckId, "player");
-        dispatch({
-          type: StateActions.ADD_HOUSE_CARDS,
-          payload: houseCards,
-        });
-        dispatch({
-          type: StateActions.ADD_PLAYER_CARDS,
-          payload: playerCards,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (cards.deckId) {
-      fetchPiles(cards.deckId);
-    }
-  }, [cards.deckId, dispatch]);
+  }, []);
 
   useEffect(() => {
     const playerScore = calculateScore(cards.playerCards);
@@ -83,7 +54,7 @@ const BlackjackBoard: React.FC = () => {
       type: StateActions.SET_PLAYER_SCORE,
       payload: playerScore,
     });
-  }, [cards.playerCards, dispatch]);
+  }, [cards.playerCards]);
 
   useEffect(() => {
     const houseScore = calculateScore(cards.houseCards);
@@ -91,7 +62,7 @@ const BlackjackBoard: React.FC = () => {
       type: StateActions.SET_HOUSE_SCORE,
       payload: houseScore,
     });
-  }, [cards.houseCards, dispatch]);
+  }, [cards.houseCards]);
 
   return (
     <div className={styles.container}>

@@ -15,6 +15,30 @@ const Actions: React.FC = () => {
   const { deckId, houseScore, playerScore, gameStatus } = useCardsState();
   const dispatch = useCardsDispatch();
 
+  const startGame = async () => {
+    setIsLoading(true);
+    try {
+      const houseCards = await cardsAPI.getPile(deckId, "house");
+      const playerCards = await cardsAPI.getPile(deckId, "player");
+      dispatch({
+        type: StateActions.ADD_HOUSE_CARDS,
+        payload: houseCards,
+      });
+      dispatch({
+        type: StateActions.ADD_PLAYER_CARDS,
+        payload: playerCards,
+      });
+      dispatch({
+        type: StateActions.CHANGE_GAME_STATUS,
+        payload: "in progress",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    
+    setIsLoading(false);
+  };
+
   const drawCard = async () => {
     setIsLoading(true);
     try {
@@ -54,7 +78,13 @@ const Actions: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {gameStatus === "in progress" ? (
+      {gameStatus === "not started" ? (
+        <>
+          <Button disabled={isLoading} onClick={startGame}>
+            Start
+          </Button>
+        </>
+      ) : gameStatus === "in progress" ? (
         <>
           <Button disabled={isLoading} onClick={drawCard}>
             Hit
