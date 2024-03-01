@@ -1,6 +1,6 @@
 .container {
   height: 20vh;
-  min-width: 50vw;
+  min-width: 30vw;
   max-width: 95vw;
   margin: auto;
   border: 1px solid black;
@@ -13,6 +13,7 @@
 }
 
 .cardBox {
+  padding: 1rem;
   height: 100%;
   display: flex;
   justify-content: center;

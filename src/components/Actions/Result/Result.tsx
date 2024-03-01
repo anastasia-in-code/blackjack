@@ -63,7 +63,7 @@ const Result: React.FC = () => {
         <p>{`Your score: ${playerScore}`}</p>
       </div>
       <Button disabled={isLoading} onClick={startAgain}>
-        Start again
+        Play again
       </Button>
     </div>
   );
