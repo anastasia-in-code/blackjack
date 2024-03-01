@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect } from "react";
 import styles from "./blackjackBoard.module.css";
 import {
@@ -14,8 +14,6 @@ import cardsAPI from "@/api/cardsAPI";
 const BlackjackBoard: React.FC = () => {
   const cards = useCardsState();
   const dispatch = useCardsDispatch();
-
-  console.log(cards.deckId)
 
   useEffect(() => {
     const fetchDeck = async (): Promise<void> => {
@@ -34,7 +32,7 @@ const BlackjackBoard: React.FC = () => {
       }
     };
 
-      fetchDeck();
+    fetchDeck();
   }, []);
 
   useEffect(() => {
@@ -66,17 +64,21 @@ const BlackjackBoard: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Player
-        cards={cards.houseCards}
-        isHouse={true}
-        score={cards.houseScore}
-      />
+      {cards.gameStatus !== "not started" && (
+        <Player
+          cards={cards.houseCards}
+          isHouse={true}
+          score={cards.houseScore}
+        />
+      )}
       <Actions />
-      <Player
-        cards={cards.playerCards}
-        isHouse={false}
-        score={cards.playerScore}
-      />
+      {cards.gameStatus !== "not started" && (
+        <Player
+          cards={cards.playerCards}
+          isHouse={false}
+          score={cards.playerScore}
+        />
+      )}
     </div>
   );
 };
